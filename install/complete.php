@@ -10,6 +10,10 @@
 $EnLng = require_once("../app/application/language/en/install.php");
 if (!isset($_GET["Lng"]) || !file_exists("../app/application/language/".@$_GET["Lng"]."/install.php")) { $_GET["Lng"] = 'en'; }
 if (@$_GET["Lng"] != 'en' ) { $MyLng = require_once("../app/application/language/".$_GET["Lng"]."/install.php"); $MyLng = array_merge($EnLng, $MyLng); } else {$MyLng = $EnLng; }
+session_start();
+$_SESSION["Msg"]  = '<h2>'.$MyLng['Complete_awesome'].'</h2>';
+$_SESSION["Msg"] .= '<p>'.$MyLng['Complete_presentation'].'</p>';
+$_SESSION["usr"] = 
 ?>
 <div id="container">
 		<table class="form">
@@ -31,6 +35,8 @@ setInterval(function () {
 	document.getElementById('CountDown').innerHTML = CountDown;
 	if (--CountDown <= 0) { document.location.href = "../";}
 }, 1000);
+
+document.location.href = "../";
 </script>
 </body>
 </html>

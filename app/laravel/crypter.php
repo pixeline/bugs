@@ -7,14 +7,16 @@ class Crypter {
 	 *
 	 * @var string
 	 */
-	public static $cipher = MCRYPT_RIJNDAEL_256;
+//	public static $cipher = MCRYPT_RIJNDAEL_256;
+	public static $cipher = MD5;
 
 	/**
 	 * The encryption mode.
 	 *
 	 * @var string
 	 */
-	public static $mode = MCRYPT_MODE_CBC;
+	//public static $mode = MCRYPT_MODE_CBC;
+	public static $mode = NULL;
 
 	/**
 	 * The block size of the cipher.
@@ -33,13 +35,14 @@ class Crypter {
 	 */
 	public static function encrypt($value)
 	{
-		$iv = mcrypt_create_iv(static::iv_size(), static::randomizer());
-
-		$value = static::pad($value);
-
-		$value = mcrypt_encrypt(static::$cipher, static::key(), $value, static::$mode, $iv);
-
-		return base64_encode($iv.$value);
+//		$iv = mcrypt_create_iv(static::iv_size(), static::randomizer());
+//
+//		$value = static::pad($value);
+//
+//		$value = mcrypt_encrypt(static::$cipher, static::key(), $value, static::$mode, $iv);
+//
+//		return base64_encode($iv.$value);
+		return $value;
 	}
 
 	/**
@@ -50,23 +53,24 @@ class Crypter {
 	 */
 	public static function decrypt($value)
 	{
-		$value = base64_decode($value);
-
-		// To decrypt the value, we first need to extract the input vector and
-		// the encrypted value. The input vector size varies across different
-		// encryption ciphers and modes, so we'll get the correct size.
-		$iv = substr($value, 0, static::iv_size());
-
-		$value = substr($value, static::iv_size());
-
-		// Once we have the input vector and the value, we can give them both
-		// to Mcrypt for decryption. The value is sometimes padded with \0,
-		// so we will trim all of the padding characters.
-		$key = static::key();
-
-		$value = mcrypt_decrypt(static::$cipher, $key, $value, static::$mode, $iv);
-
-		return static::unpad($value);
+//		$value = base64_decode($value);
+//
+//		// To decrypt the value, we first need to extract the input vector and
+//		// the encrypted value. The input vector size varies across different
+//		// encryption ciphers and modes, so we'll get the correct size.
+//		$iv = substr($value, 0, static::iv_size());
+//
+//		$value = substr($value, static::iv_size());
+//
+//		// Once we have the input vector and the value, we can give them both
+//		// to Mcrypt for decryption. The value is sometimes padded with \0,
+//		// so we will trim all of the padding characters.
+//		$key = static::key();
+//
+//		$value = mcrypt_decrypt(static::$cipher, $key, $value, static::$mode, $iv);
+//
+//		return static::unpad($value);
+		return $value;
 	}
 
 	/**
@@ -81,11 +85,13 @@ class Crypter {
 		// random source we can for this server environment.
 		if (defined('MCRYPT_DEV_URANDOM'))
 		{
-			return MCRYPT_DEV_URANDOM;
+//			return MCRYPT_DEV_URANDOM;
+			return mt_rand();
 		}
 		elseif (defined('MCRYPT_DEV_RANDOM'))
 		{
-			return MCRYPT_DEV_RANDOM;
+//			return MCRYPT_DEV_RANDOM;
+			return mt_rand();
 		}
 		// When using the default random number generator, we'll seed
 		// the generator on each call to ensure the results are as
@@ -94,7 +100,8 @@ class Crypter {
 		{
 			mt_srand();
 
-			return MCRYPT_RAND;
+//			return MCRYPT_RAND;
+			return mt_rand();
 		}
 	}
 
